@@ -1,0 +1,35 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!--基于占位符方式 配置单个properties -->
+    <!--<context:property-placeholder location="conf/jdbc.properties"/>-->
+    <!--基于占位符方式 配置多个properties -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="location" value="conf/jdbc.properties"/>
+    </bean>
+
+    <!--基于SpEL表达式 配置多个properties -->
+    <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:/conf/jdbc.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--基于SpEL表达式 配置单个properties -->
+    <!--<util:properties id="configProperties" location="classpath:conf/jdbc.properties"/>-->
+
+    <!--注解驱动 -->
+    <context:annotation-config/>
+
+    <bean id="userDao" class="com.zejian.spring.springIoc.dao.impl.UserDaoImpl"/>
+
+    <bean id="userDao2" class="com.zejian.spring.springIoc.dao.impl.UserDaoImpl"/>
+
+    <bean id="userService" class="com.zejian.spring.springIoc.service.impl.UserServiceImpl"/>
+</beans>

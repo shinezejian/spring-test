@@ -1,0 +1,52 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!--<context:component-scan base-package=""-->
+
+	<!-- 定义目标对象 -->
+	<bean name="productDao" class="com.zejian.spring.springAop.dao.daoimp.ProductDaoImpl" />
+
+	<!-- 定义切面 -->
+	<bean name="myAspectXML" class="com.zejian.spring.springAop.AspectJ.MyAspectXML" />
+
+
+	<!--<bean name="myAspectXML2" class="com.zejian.spring.springAop.AspectJ.MyAspectXML2" />-->
+
+	<!-- 配置AOP 切面 -->
+	<aop:config>
+		<!-- 定义切点函数 -->
+		<aop:pointcut id="pointcut" expression="execution(* com.zejian.spring.springAop.dao.ProductDao.add(..))" />
+
+		<!-- 定义其他切点函数 -->
+		<aop:pointcut id="delPointcut" expression="execution(* com.zejian.spring.springAop.dao.ProductDao.delete(..))" />
+
+		<!-- 定义通知 order 定义优先级,值越小优先级越大-->
+		<aop:aspect ref="myAspectXML" order="0">
+			<!-- 定义通知
+			method 指定通知方法名,必须与MyAspectXML中的相同
+			pointcut 指定切点函数
+			-->
+			<aop:before method="before" pointcut-ref="pointcut" />
+
+			<!-- 后置通知  returning="returnVal" 定义返回值 必须与类中声明的名称一样-->
+			<aop:after-returning method="afterReturn" pointcut-ref="pointcut"  returning="returnVal" />
+
+			<!-- 环绕通知 -->
+			<aop:around method="around" pointcut-ref="pointcut"  />
+
+			<!--异常通知 throwing="throwable" 指定异常通知错误信息变量,必须与类中声明的名称一样-->
+			<aop:after-throwing method="afterThrowing" pointcut-ref="pointcut" throwing="throwable"/>
+
+			<!--
+				 method : 通知的方法(最终通知)
+				 pointcut-ref : 通知应用到的切点方法
+				-->
+			<aop:after method="after" pointcut-ref="pointcut"/>
+		</aop:aspect>
+	</aop:config>
+</beans>

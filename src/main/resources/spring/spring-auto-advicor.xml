@@ -1,0 +1,40 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 定义目标对象 -->
+	<bean id="customerDao" class="com.zejian.spring.springAop.dao.daoimp.CustomerDaoImp" />
+
+	<bean id="orderDao" class="com.zejian.spring.springAop.dao.daoimp.OrderDaoImp"/>
+
+	<!-- 定义增强(通知)-->
+	<bean id="beforeAdvice" class="com.zejian.spring.springAop.advice.MyBeforeAdvice" />
+	<!-- 定义环绕(通知)-->
+	<bean id="aroundAdvice" class="com.zejian.spring.springAop.advice.MyAroundAdvice" />
+
+	<!-- 自动代理:按名称的代理 基于后处理Bean,后处理Bean不需要配置ID-->
+	<!--<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">-->
+		<!--<property name="beanNames" value="*Dao" />-->
+		<!--<property name="interceptorNames" value="beforeAdvice" />-->
+	<!--</bean>-->
+
+	<!-- 定义一个带有切点的切面 -->
+	<bean id="myPointcutAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<property name="pattern" value=".*add.*"/>
+		<property name="advice" ref="aroundAdvice"/>
+	</bean>
+
+	<!-- 基于Advisor匹配机制的自动代理创建器：它会对容器中所有的Advisor进行扫描，
+	自动将这些切面应用到匹配的Bean中（即为目标Bean创建代理实例），
+	实现类为DefaultAdvisorAutoProxyCreator； -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
+
+	<!--区分基于ProxyFattoryBean的代理与自动代理区别?-->
+	<!--***** ProxyFactoryBean:先有被代理对象,将被代理对象传入到代理类中生成代理.-->
+	<!--自动代理基于后处理Bean.在Bean的生成过程中,就产生了代理对象,把代理对象返回.生成Bean已经是代理对象.-->
+
+</beans>

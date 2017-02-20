@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/mvc
+		 http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		 http://www.springframework.org/schema/context
+		 http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+>
+
+	<!--&lt;!&ndash; 包扫描 &ndash;&gt;-->
+	<!--<context:component-scan  base-package="com.zejian.spring.dto" />-->
+
+	<!--<bean id="requestBean" scope="request" class="com.zejian.spring.dto.RequestBean" >-->
+		<!--&lt;!&ndash; 声明aop代理 &ndash;&gt;-->
+		<!--<aop:scoped-proxy />-->
+	<!--</bean>-->
+
+	<!--<bean id="sessionBean" scope="request" class="com.zejian.spring.dto.SessionBean" >-->
+		<!--&lt;!&ndash; 声明aop代理 &ndash;&gt;-->
+		<!--<aop:scoped-proxy />-->
+	<!--</bean>-->
+
+	<!--&lt;!&ndash;扫描控制器的包名&ndash;&gt;-->
+	<!--<context:component-scan base-package="com.zejian.spring.controller"/>-->
+
+	<!--&lt;!&ndash; 扫描标注@Service注解的service &ndash;&gt;-->
+	<!--<context:component-scan base-package="com.zejian.spring.service"/>-->
+	<!--&lt;!&ndash; 配置转换器 &ndash;&gt;-->
+	<!--<mvc:annotation-driven conversion-service="conversionService" />-->
+
+	<!--指定的那些资源不需要通过springmvc的Dispatch-->
+	<mvc:resources location="/css/" mapping="/css/*" />
+
+
+	<!--1:开始springMVC注解模式-->
+
+	<!--简化配置:
+    ①自动注册DefaultAnnotationHandlerMapping,AnnotationMethodHandlerAdapter
+    ②提供一系列:数据绑定,数字和日期的format,@NumberFormat,@DataTimeFormat,xml,json默认读写支持
+    -->
+	<mvc:annotation-driven/>
+
+	<!--2:静态资源默认servlet配置
+    ①加入对静态资源的处理:js,css,gif,png
+    ②允许使用"/"做整体映射
+    -->
+	<mvc:default-servlet-handler/>
+
+	<!--3:配置JSP　显示ViewResolver-->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+
+	<!-- 配置MultipartResolver 用于文件上传 使用spring的CommosMultipartResolver -->
+	<!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+		<!--&lt;!&ndash; 设置默认字符编码 &ndash;&gt;-->
+		<!--<property name="defaultEncoding" value="uft-8" />-->
+		<!--&lt;!&ndash; 设置最大上传文件大小(单位B)8*1024*1024=8388608=8MB &ndash;&gt;-->
+		<!--<property name="maxUploadSize" value="8388608" />-->
+	<!--</bean>-->
+	<!-- 配置自定义转换器  -->
+
+</beans>

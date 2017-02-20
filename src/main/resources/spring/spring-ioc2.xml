@@ -1,0 +1,59 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<!-- 配置单个properties -->
+	<!--<context:property-placeholder location="conf/jdbc.properties"/>-->
+	<!-- 配置多个properties -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="location" value="conf/jdbc.properties"/>
+	</bean>
+
+
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:/conf/jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置单个properties -->
+	<!--<util:properties id="configProperties" location="classpath:conf/jdbc.properties"/>-->
+	<!--&lt;!&ndash; 默认构造创建,并通过property 注入属性值 &ndash;&gt;-->
+	<!--<bean id="account" class="com.zejian.spring.springIoc.pojo.Account" >-->
+		<!--<property name="name" value="I am Spring-IOC2" />-->
+		<!--<property name="pwd" value="123" />-->
+	<!--</bean>-->
+
+	<!-- 包扫描 -->
+	<!--<context:component-scan base-package="com.zejian.spring.dto" />-->
+
+	<!--<bean id="requestBean" scope="request" class="com.zejian.spring.dto.RequestBean" >-->
+		<!--&lt;!&ndash; 声明aop代理 &ndash;&gt;-->
+		<!--<aop:scoped-proxy />-->
+	<!--</bean>-->
+	<context:annotation-config />
+	<!--<bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>-->
+  	<!--<bean id="prototypeBean" scope="request" class="com.zejian.spring.dto.PrototypeBean" >-->
+		<!--&lt;!&ndash; 声明aop代理 &ndash;&gt;-->
+		<!--<aop:scoped-proxy />-->
+	<!--</bean>-->
+	<bean id="userDao" class="com.zejian.spring.springIoc.dao.impl.UserDaoImpl" />
+	<!--<bean id="userDao" class="com.zejian.spring.springIoc.dao.impl.UserDaoImpl" />-->
+
+	<!-- autowire-candidate="false" 过滤该类型 -->
+	<bean id="userDao2" class="com.zejian.spring.springIoc.dao.impl.UserDaoImpl" />
+	<!--<bean id="userDao2" autowire-candidate="false"  class="com.zejian.spring.springIoc.dao.impl.UserDaoImpl" />-->
+
+	<!-- byName 根据类型自动装配userDao-->
+	<!--<bean id="userService" autowire="byName" class="com.zejian.spring.springIoc.service.impl.UserServiceImpl" />-->
+	<bean id="userService" class="com.zejian.spring.springIoc.service.impl.UserServiceImpl" />
+	<!-- byType 根据类型自动装配userDao-->
+	<!--<bean id="userService" autowire="byType" class="com.zejian.spring.springIoc.service.impl.UserServiceImpl" />-->
+</beans>

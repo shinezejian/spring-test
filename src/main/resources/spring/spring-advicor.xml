@@ -1,0 +1,86 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!-- 定义目标对象 -->
+	<bean id="customerDao" class="com.zejian.spring.springAop.dao.daoimp.CustomerDaoImp" />
+
+	<!-- 定义增强(通知)-->
+	<bean id="beforeAdvice" class="com.zejian.spring.springAop.advice.MyBeforeAdvice" />
+
+	<!-- 定义环绕(通知)-->
+	<bean id="aroundAdvice" class="com.zejian.spring.springAop.advice.MyAroundAdvice" />
+
+
+	<!-- 定义切点切面:RegexpMethodPointcutAdvisor 构造正则表达式切点切面  -->
+	<bean id="myBeforePointcutAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<!-- 定义表达式,规定哪些方法执行拦截 -->
+		<!-- . 任意字符  * 任意个 -->
+		<!-- <property name="pattern" value=".*"/> -->
+		<!-- . 任意字符  * 任意个 -->
+		<!-- <property name="pattern" value=".*add.*"></property> -->
+		<!-- 定义切点,即那些党风 -->
+		<property name="patterns" value=".*add.*,.*find.*" />
+		<!-- 应用增强 通知-->
+		<property name="advice" ref="beforeAdvice"/>
+	</bean>
+
+
+	<!-- Spring支持配置生成代理(不带切点,即所有目标方法都会得到增强): -->
+	<bean id="customerDaoProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<!-- 设置目标对象 -->
+		<property name="target" ref="customerDao"/>
+		<!-- 设置实现的接口 (多接口的写法),value中写接口的全路径 -->
+		<property name="proxyInterfaces">
+			<list>
+				<value>com.zejian.spring.springAop.dao.CustomerDao</value>
+			</list>
+		</property>
+		<!-- 设置实现的接口 ,value中写接口的全路径 -->
+		<!--<property name="proxyInterfaces" value="com.zejian.spring.springAop.dao.CustomerDao"/>-->
+		<!-- 需要使用value:要的名称 -->
+		<property name="interceptorNames" value="beforeAdvice"/>
+	</bean>
+
+
+	<!-- 定义切点切面:RegexpMethodPointcutAdvisor 构造正则表达式切点切面  -->
+	<bean id="myPointcutAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<!-- 定义表达式,规定哪些方法执行拦截 -->
+		<!-- . 任意字符  * 任意个 -->
+		<!-- <property name="pattern" value=".*"/> -->
+		<!-- . 任意字符  * 任意个 -->
+		<!-- <property name="pattern" value=".*add.*"></property> -->
+		<!-- 切点 -->
+		<property name="patterns" value=".*add.*,.*find.*" />
+		<!-- 应用增强 通知-->
+		<property name="advice" ref="aroundAdvice"/>
+	</bean>
+
+
+	<!--&lt;!&ndash; Spring支持配置生成代理(带切点,指定的方法会被增强): &ndash;&gt;-->
+	<!--<bean id="customerDaoProxyAround" class="org.springframework.aop.framework.ProxyFactoryBean">-->
+		<!--&lt;!&ndash; 设置目标对象 &ndash;&gt;-->
+		<!--<property name="target" ref="customerDao" />-->
+		<!--&lt;!&ndash; 设置实现的接口 ,value中写接口的全路径 &ndash;&gt;-->
+		<!--<property name="proxyInterfaces" value="com.zejian.spring.springAop.dao.CustomerDao" />-->
+		<!--&lt;!&ndash; 设置通知,需要使用value:要的名称 &ndash;&gt;-->
+		<!--<property name="interceptorNames" value="aroundAdvice" />-->
+	<!--</bean>-->
+
+	<bean id="orderDaoImp" class="com.zejian.spring.springAop.dao.daoimp.OrderDaoImp"/>
+
+	<!-- 定义生成代理对象 -->
+	<bean id="orderDaoImpProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<!-- 配置目标 -->
+		<property name="target" ref="orderDaoImp" />
+		<!-- 针对类的代理CGlib -->
+		<property name="proxyTargetClass" value="true" />
+		<!-- 在目标上应用增强 -->
+		<property name="interceptorNames" value="myPointcutAdvisor" />
+	</bean>
+
+</beans>

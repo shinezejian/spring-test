@@ -1,0 +1,64 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		" default-lazy-init="true">
+
+	<!-- 默认构造创建,并通过property 注入属性值 -->
+	<bean id="account" scope="prototype" class="com.zejian.spring.springIoc.pojo.Account" >
+		<property name="name" value="I am SpringIOC1" />
+		<property name="pwd" value="123" />
+	</bean>
+
+	<!--&lt;!&ndash; 带参构造创建,并通过constructor-arg注入属性值 &ndash;&gt;-->
+	<!--<bean id="account2" class="com.zejian.spring.springIoc.pojo.Account" >-->
+		<!--<constructor-arg name="name" value="Jack" />-->
+		<!--<constructor-arg name="pwd" value="1234" />-->
+	<!--</bean>-->
+
+	<!--&lt;!&ndash; 静态工厂创建,调用静态方法createAccount &ndash;&gt;-->
+	<!--<bean id="account3" class="com.zejian.spring.springIoc.conf.PojoFactory"-->
+		  <!--factory-method="createAccount"/>-->
+
+	<!--&lt;!&ndash; 工厂实例创建,先创建工厂类在调用方法createAccount2 &ndash;&gt;-->
+	<!--<bean id="factory" class="com.zejian.spring.springIoc.conf.PojoFactory" />-->
+	<!--<bean id="account4" factory-bean="factory"  factory-method="createAccount2"/>-->
+
+	<!-- 声明包扫描 -->
+	<!--<context:component-scan base-package="com.zejian.spring.springIoc" />-->
+
+	<!-- name属性配置多个名称  lazy-init="false" 表示非延长加载-->
+	<!--<bean name="accountDao" lazy-init="false"-->
+		  <!--class="com.zejian.spring.springIoc.dao.impl.AccountDaoImpl"/>-->
+	<!-- id属性配置唯一名称而且不能与name相同-->
+	<!--<bean id="accountDaoId" class="com.zejian.spring.springIoc.dao.impl.AccountDaoImpl"/>-->
+	<!--&lt;!&ndash; name属性指明要给那个Bean赋予别名,alias则指明赋予的别名&ndash;&gt;-->
+	<!--<alias name="accountDaoId" alias="accountDao3" />-->
+
+
+
+
+	<!-- 声明accountService对象,交给spring创建 -->
+	<!--<bean name="accountService" class="com.zejian.spring.springIoc.service.impl.AccountServiceImpl">-->
+		  <!--&lt;!&ndash; 注入accountDao对象,需要set方法&ndash;&gt;-->
+		  <!--<property name="accountDao" ref="accountDao"/>-->
+	<!--</bean>-->
+
+	<bean name="accountDao" class="com.zejian.spring.springIoc.dao.impl.AccountDaoImpl"/>
+	<!-- 通过构造注入依赖 -->
+	<bean name="accountService" class="com.zejian.spring.springIoc.service.impl.AccountServiceImp">
+		<!-- 构造方法方式注入accountDao对象,-->
+		<constructor-arg  ref="accountDao"/>
+	</bean>
+
+	<bean id="user" class="com.zejian.spring.springIoc.pojo.User" >
+		<constructor-arg index="0" value="Jack"/>
+		<constructor-arg index="1" value="26"/>
+	</bean>
+
+
+	<!--<import resource="spring-ioc2.xml" />-->
+</beans>
