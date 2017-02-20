@@ -45,7 +45,7 @@ public class JDKProxy implements InvocationHandler {
 
         if("addUser".equals(method.getName())){
             // 记录日志:
-            System.out.println("日志记录=================");
+            System.out.println("日志记录======");
 
             //调用目标对象的方法
             Object result = method.invoke(target, args);
